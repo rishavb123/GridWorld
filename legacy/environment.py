@@ -4,11 +4,8 @@ from action import Action
 class Environment:
 
     def __init__(self, rows, cols):
-        self.board = [[0 for j in range(cols)] for i in range(rows)]
-        self.rewards = [[0 for j in range(cols)] for i in range(rows)]
         self.rows = rows
         self.cols = cols
-        self.items = []
 
     def place(self, item, x, y):
         self.items.append({ "item" : item })
