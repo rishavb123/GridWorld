@@ -21,14 +21,8 @@ policy = init_random_policy(grid)
 print("initial_policy:")
 print_policy(policy, grid)
 
-V = init_random_value_function(grid)
-policy = init_random_policy(grid)
-
-while True:
-    iterative_policy_evaluation(grid, policy, V)
-    is_policy_converged = policy_iteration(grid, V, policy)[1]
-    if is_policy_converged:
-        break
+V = value_iteration(grid)
+policy = policy_iteration(grid, V)[0]
 
 print("value_function:")
 print_values(V, grid)

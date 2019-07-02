@@ -22,22 +22,16 @@ def iterative_policy_evaluation(grid, policy, V={}):
     while True:
         delta = 0
         for s in S:
-            old_v = 0
-            try:
-                old_v = V[s]
-            except:
-                pass
+            old_v = V.get(s, 0)
             if not grid.is_terminal(s):
                 grid.set_state(s)
                 a = policy[s]
                 r = grid.move(a)
-                next_v = 0
-                try:
-                    next_v = V[grid.get_state()]
-                except:
-                    pass
+                next_v = V.get(grid.get_state(), 0)
                 V[s] = r + GAMMA * next_v
                 delta = max(delta, abs(V[s] - old_v))
+            else:
+                V[s] = 0
         if delta < EPSILON:
             break
     return V
@@ -62,3 +56,24 @@ def policy_iteration(grid, V, policy=None):
             if new_a != old_a:
                 is_policy_converged = False
     return policy, is_policy_converged
+
+def value_iteration(grid, V={}):
+    while True:
+        delta = 0
+        for s in grid.all_states():
+            if grid.is_terminal(s):
+                V[s] = 0
+            else:
+                old_v = V.get(s, 0)
+                new_v = float('-inf')
+                for a in grid.actions[s]:
+                    grid.set_state(s)
+                    r = grid.move(a)
+                    v = r + GAMMA * V.get(grid.get_state(), 0)
+                    if v > new_v:
+                        new_v = v
+                V[s] = new_v
+                delta = max(delta, abs(new_v - old_v))
+        if delta < EPSILON:
+            break
+    return V

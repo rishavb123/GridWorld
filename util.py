@@ -1,5 +1,4 @@
 from actions import *
-from grid import Grid
 
 def print_values(V, g):
     for i in range(g.rows):
@@ -9,7 +8,7 @@ def print_values(V, g):
             if v >= 0:
                 print(" %.2f|" % v, end="")
             else:
-                print("%.2f|" % v, end="") # -ve sign takes up an extra space
+                print("%.2f|" % v, end="") # - sign takes up an extra space
         print("")
     print("------" * g.cols + "\n")
 
