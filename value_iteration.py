@@ -31,4 +31,4 @@ print("final_policy:")
 print_policy(policy, grid)
 
 if input('Would you like to see the agent play the maze? (Y / n): ').lower()[0] == 'y':
-    grid.play(policy, 0.5)
+    grid.play(policy)
