@@ -77,3 +77,20 @@ def value_iteration(grid, V={}):
         if delta < EPSILON:
             break
     return V
+
+def monte_carlo(grid, V={}, policy=None, iterations=1000):
+    if policy == None:
+        policy = init_random_policy(grid)
+    returns = []
+    for _ in range(iterations):
+        states_and_returns = grid.play(policy, delay=0, log=False)
+        seen_states = set()
+        for s, G in states_and_returns:
+            if s not in seen_states:
+                if s in returns.keys():
+                    returns[s].append(G)
+                else:
+                    returns[s] = [G]
+                V[s] = np.mean(returns[s])
+                seen_states.add(s)
+    return V

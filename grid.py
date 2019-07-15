@@ -1,5 +1,7 @@
 from actions import *
 from time import sleep
+import numpy as np
+from constants import *
 
 class Grid:
 
@@ -34,6 +36,12 @@ class Grid:
         self.i = state[0]
         self.j = state[1]
 
+    def set_start(self, state):
+        self.start = state
+
+    def random_start_position(self):
+        self.set_start(list(self.all_states())[np.random.choice(len(self.all_states()))])
+
     def get_state(self):
         return (self.i,  self.j)
 
@@ -63,20 +71,39 @@ class Grid:
     def is_terminal(self, state):
         return state not in self.actions
 
-    def play(self, policy, delay=0.5, symbol='A'):
+    def play(self, policy, delay=0.5, symbol='A', log=True):
         self.restart()
         self.draw_board()
         total_reward = 0
         steps = 0
+        states_and_rewards = []
         while not self.game_over():
             sleep(delay)
             r = self.move(policy[self.get_state()])
+            s = self.get_state()
+            states_and_rewards.append((s, r))
             steps += 1
-            print('Step: ', steps, '\tReward: ', r)
+            if log:
+                print('Step: ', steps, '\tReward: ', r)
+                self.draw_board(symbol=symbol)
             total_reward += r
-            self.draw_board(symbol=symbol)
-        print('\nTotal Number of Steps: ', steps)
-        print('Total Reward: ', total_reward, '\n')
+        if log:
+            print('\nTotal Number of Steps: ', steps)
+            print('Total Reward: ', total_reward, '\n')
+
+        states_and_returns = []
+        G = 0
+        first = True
+
+        for s, r in reversed(states_and_rewards):
+            if first:
+                first = False
+            else:
+                states_and_returns.append(G)
+            G = r + GAMMA * G
+
+        states_and_returns.reverse()
+        return states_and_returns
 
     @staticmethod
     def standard_grid():
