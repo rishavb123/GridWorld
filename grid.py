@@ -73,7 +73,8 @@ class Grid:
 
     def play(self, policy, delay=0.5, symbol='A', log=True):
         self.restart()
-        self.draw_board()
+        if log:
+            self.draw_board()
         total_reward = 0
         steps = 0
         states_and_rewards = []
@@ -99,7 +100,7 @@ class Grid:
             if first:
                 first = False
             else:
-                states_and_returns.append(G)
+                states_and_returns.append((s, G))
             G = r + GAMMA * G
 
         states_and_returns.reverse()

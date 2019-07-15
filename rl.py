@@ -78,11 +78,10 @@ def value_iteration(grid, V={}):
             break
     return V
 
-def monte_carlo(grid, V={}, policy=None, iterations=1000):
-    if policy == None:
-        policy = init_random_policy(grid)
-    returns = []
+def monte_carlo(grid, policy, V={}, iterations=1000):
+    returns = {}
     for _ in range(iterations):
+        grid.random_start_position()
         states_and_returns = grid.play(policy, delay=0, log=False)
         seen_states = set()
         for s, G in states_and_returns:
