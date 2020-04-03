@@ -24,3 +24,13 @@ def print_policy(P, g):
             print("  %s  |" % a, end="")
         print("")
     print("------" * g.cols + "\n")
+
+def max_dict(d):
+    max_key = None
+    max_val = float('-inf')
+    for k, v in d.items():
+        if v > max_val:
+            max_val = v
+            max_key = k
+    return max_key, max_val
+
